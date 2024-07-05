@@ -1,13 +1,12 @@
-package ru.itgirls.jdbc_spring_example;
+package ru.itgirls.jdbc_spring_example.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ru.itgirls.jdbc_spring_example.model.Book;
+import ru.itgirls.jdbc_spring_example.repository.BookRepository;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +34,24 @@ public class BookRepositoryImpl implements BookRepository {
             throw new IllegalStateException(e);
         }
         return result;
+    }
+
+    @Override
+    public Book findBookId(Long id) {
+        String SQL_findBookById = "select * from books where id = ?;";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_findBookById)) {
+            preparedStatement.setLong(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return converRowToBook(resultSet);
+                } else {
+                    return null; // Если книга не найдена
+                }
+            }
+        } catch (SQLException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     private Book converRowToBook(ResultSet resultSet) throws SQLException {

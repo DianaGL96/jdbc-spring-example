@@ -1,4 +1,4 @@
-package ru.itgirls.jdbc_spring_example;
+package ru.itgirls.jdbc_spring_example.model;
 
 public class Book {
     private Long id;
