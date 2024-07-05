@@ -7,5 +7,4 @@ public class JdbcSpringExampleApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(JdbcSpringExampleApplication.class, args);
 	}
-
 }
